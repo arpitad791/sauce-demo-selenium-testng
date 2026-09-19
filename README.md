@@ -25,3 +25,5 @@ Uses Page Object Model — each page (`LoginPage`, `CartPage`, `CheckoutPage`) e
 
 ## Results
 9/9 tests passing.
+
+![Test Report](test-report.png)
