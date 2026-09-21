@@ -1,5 +1,7 @@
 # SauceDemo Test Automation Suite
 
+![Tests](https://github.com/arpitad791/sauce-demo-selenium-testng/actions/workflows/tests.yml/badge.svg)
+
 Automated regression testing suite for [SauceDemo](https://www.saucedemo.com), built using Selenium WebDriver and TestNG, following the Page Object Model (POM) design pattern.
 
 ## Tech Stack
@@ -8,6 +10,7 @@ Automated regression testing suite for [SauceDemo](https://www.saucedemo.com), b
 - TestNG 7.10
 - Maven
 - WebDriverManager (automatic browser driver management)
+- GitHub Actions (CI — runs the suite headless on every push/PR to `main`)
 
 ## Test Coverage
 - **Login:** valid login, invalid credentials, locked-out user
@@ -17,11 +20,16 @@ Automated regression testing suite for [SauceDemo](https://www.saucedemo.com), b
 ## Design Pattern
 Uses Page Object Model — each page (`LoginPage`, `CartPage`, `CheckoutPage`) encapsulates its own locators and actions, keeping test logic separate from page interaction. Explicit waits (`WebDriverWait`) handle synchronization on dynamic page transitions.
 
+A shared `BaseTest` owns WebDriver setup/teardown (including switching to headless Chrome automatically when running in CI); each test class extends it and only adds what's specific to that flow (login, page-object initialization).
+
 ## How to Run
-1. Clone this repo
-2. Open in IntelliJ IDEA (or any Java IDE)
-3. Run `mvn clean install` to download dependencies
-4. Right-click the `tests` package → Run All
+```bash
+mvn test
+```
+Runs headed locally by default. Clone the repo, make sure Java 17 and Maven are installed, and run the command above — Maven and WebDriverManager handle the rest (dependencies, matching chromedriver).
+
+## CI
+Every push/PR to `main` triggers [`.github/workflows/tests.yml`](.github/workflows/tests.yml), which runs the full suite headless on Ubuntu and uploads the TestNG/Surefire report as a build artifact.
 
 ## Results
 9/9 tests passing.
