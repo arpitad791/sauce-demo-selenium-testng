@@ -1,31 +1,15 @@
 package tests;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import pages.LoginPage;
-import org.openqa.selenium.chrome.ChromeOptions;
-import java.util.Map;
 
-public class LoginTest {
-    WebDriver driver;
+public class LoginTest extends BaseTest {
     LoginPage loginPage;
 
     @BeforeMethod
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-features=PasswordLeakDetection,PasswordCheck");
-        options.addArguments("--incognito");
-        options.setExperimentalOption("prefs", Map.of(
-                "credentials_enable_service", false,
-                "profile.password_manager_enabled", false,
-                "profile.password_manager_leak_detection", false
-        ));
-        driver = new ChromeDriver(options);
-        driver.get("https://www.saucedemo.com/");
+    public void initPage() {
         loginPage = new LoginPage(driver);
     }
 
@@ -48,10 +32,5 @@ public class LoginTest {
         loginPage.login("locked_out_user", "secret_sauce");
         String error = loginPage.getErrorMessage();
         Assert.assertTrue(error.contains("locked out"));
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        if (driver != null) driver.quit();
     }
 }

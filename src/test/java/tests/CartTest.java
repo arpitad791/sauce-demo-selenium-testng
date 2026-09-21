@@ -1,37 +1,18 @@
 package tests;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import pages.CartPage;
 import pages.LoginPage;
-import org.openqa.selenium.chrome.ChromeOptions;
-import java.util.Map;
 
-public class CartTest {
-    WebDriver driver;
+public class CartTest extends BaseTest {
     CartPage cartPage;
 
     @BeforeMethod
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-features=PasswordLeakDetection,PasswordCheck");
-        options.addArguments("--incognito");
-        options.setExperimentalOption("prefs", Map.of(
-                "credentials_enable_service", false,
-                "profile.password_manager_enabled", false,
-                "profile.password_manager_leak_detection", false
-        ));
-        driver = new ChromeDriver(options);
-        driver.get("https://www.saucedemo.com/");
-
+    public void loginAndInitCart() {
         // Log in first since cart page requires authentication
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login("standard_user", "secret_sauce");
-
+        new LoginPage(driver).login("standard_user", "secret_sauce");
         cartPage = new CartPage(driver);
     }
 
@@ -60,10 +41,5 @@ public class CartTest {
 
         cartPage.removeFirstItemFromCart();
         Assert.assertEquals(cartPage.getCartItemCount(), 0);
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        if (driver != null) driver.quit();
     }
 }
