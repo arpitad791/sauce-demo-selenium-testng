@@ -2,7 +2,6 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
@@ -24,7 +23,7 @@ public class LoginPage {
     }
 
     public void login(String username, String password) {
-        driver.findElement(usernameField).sendKeys(username);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField)).sendKeys(username);
         driver.findElement(passwordField).sendKeys(password);
         driver.findElement(loginButton).click();
         wait.until(ExpectedConditions.or(
@@ -34,6 +33,6 @@ public class LoginPage {
     }
 
     public String getErrorMessage() {
-        return driver.findElement(errorMessage).getText();
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
     }
 }
