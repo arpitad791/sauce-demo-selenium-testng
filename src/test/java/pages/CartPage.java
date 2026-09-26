@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
-
 import java.util.List;
 
 public class CartPage {
@@ -42,7 +41,7 @@ public class CartPage {
     }
 
     public String getCartBadgeCount() {
-        return driver.findElement(cartBadge).getText();
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge)).getText();
     }
 
     public boolean isCartBadgePresent() {
@@ -55,7 +54,9 @@ public class CartPage {
     }
 
     public void removeFirstItemFromCart() {
+        int before = getCartItemCount();
         driver.findElement(removeButtons).click();
+        wait.until(ExpectedConditions.numberOfElementsToBe(cartItems, before - 1));
     }
 
     public int getCartItemCount() {
